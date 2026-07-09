@@ -7,9 +7,20 @@ const labels: Record<string, string> = {
   mock: "模擬資料",
 };
 
+const sourceColors: Record<string, string> = {
+  field_report: "source-field",
+  phone_call: "source-phone",
+  social_post: "source-social",
+  official_notice: "source-official",
+  volunteer_update: "source-volunteer",
+  mock: "source-mock",
+};
+
 export function SourceLabel({ sourceType }: { sourceType: string }) {
+  const colorClass = sourceColors[sourceType] ?? "source-default";
+
   return (
-    <span className="source-label">
+    <span className={`source-label ${colorClass}`}>
       來源：{labels[sourceType] ?? sourceType}
     </span>
   );

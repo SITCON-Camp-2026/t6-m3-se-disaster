@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
 import messyReports from "../src/fixtures/phase-0/messy-reports.json";
+import {
+  buildFilterCounts,
+  inferConfidence,
+} from "../src/features/phase-0/Phase0RawInfoPanel";
 import { createPhase0Judgement } from "../src/features/phase-0/phase0-heuristics";
 
 describe("phase 0 heuristics", () => {
@@ -41,5 +45,19 @@ describe("phase 0 heuristics", () => {
 
     expect(judgement.possibleKind).toBe("unknown");
     expect(judgement.suggestedNextStep).toBe("send_to_human_review");
+  });
+
+  it("maps stronger records to higher confidence", () => {
+    expect(inferConfidence("M-009")).toBe("high");
+    expect(inferConfidence("M-010")).toBe("high");
+    expect(inferConfidence("M-011")).toBe("low");
+  });
+
+  it("counts records for each filter category", () => {
+    const { sourceCounts, confidenceCounts } = buildFilterCounts(messyReports);
+
+    expect(sourceCounts.get("all")).toBe(12);
+    expect(sourceCounts.get("social_post")).toBeGreaterThan(0);
+    expect(confidenceCounts.high).toBe(2);
   });
 });

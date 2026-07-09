@@ -45,17 +45,13 @@ describe("App", () => {
     expect(screen.getAllByText("未查核").length).toBeGreaterThan(0);
   });
 
-  it("keeps draft CRUD as learner work instead of starter output", () => {
+  it("shows editable phase 0 drafts for the messy records", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "整理工作台" }));
 
-    expect(screen.getByText("尚未建立整理草稿")).toBeInTheDocument();
-    expect(
-      screen.getByText(/請 agent 加上建立、編輯、刪除或重設整理草稿/),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByText(/已產生 \d+ 筆安全邊界草稿/),
-    ).not.toBeInTheDocument();
+    expect(screen.getByText("整理草稿")).toBeInTheDocument();
+    expect(screen.getByText("已建立 6 筆整理草稿")).toBeInTheDocument();
+    expect(screen.getAllByText(/信心：/).length).toBeGreaterThan(0);
   });
 });
